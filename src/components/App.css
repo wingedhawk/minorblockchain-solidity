@@ -1,0 +1,14 @@
+img {
+  height: 80px;
+  padding-left: 25px;
+}
+
+h1 {
+  padding: 20px;
+}
+
+.container-fluid .address{
+  text-align: center;
+  border: 1px solid gray;
+  padding-left: 2px;
+}

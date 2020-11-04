@@ -1,0 +1,59 @@
+import React, {Component} from 'react';
+import Web3 from 'web3';
+import fs from 'fs';
+clear
+cort default class BalancesERC20 extends Component {
+
+    constructor(props) {
+        super(props)
+        this.state = { balanceERC20: 0, account:this.props.account}
+    }
+
+    async LoadData() {
+        console.log("test");
+        // const web3 = new Web3(Web3.givenProvider || "http://localhost:8545")
+        // const accounts = await web3.eth.getAccounts()
+        // this.setState({ account: accounts[0] })
+    }
+
+    async getContract() {
+        var web3 = new Web3("http://192.168.2.10:8545");
+
+        var contractInfo = '../contract-info/IDO.json';
+        var parsed= JSON.parse(fs.readFileSync(contractInfo));
+        var abi = parsed.abi;
+
+        const networkId = await web3.eth.net.getId();
+        let MyIdoContract = new web3.eth.Contract(
+            parsed.abi,
+            parsed.networks[networkId].address
+        );
+
+        return MyIdoContract;
+    }
+
+    async getBalance(contractMethods) {
+        let balance = await contractMethods.methods.balanceOf(this.state.account).call()
+        .then(result => {return result});
+
+        return balance;
+    }
+
+
+    componentDidMount() {
+        //const MyContract = require('../../../contract-info/IDO.json');
+        let contractMethods = this.getContract();
+        this.state.balanceERC20 = this.getBalance(contractMethods);
+        this.LoadData();
+    }
+
+
+    render() {
+        return(
+            <div>
+                <p>BALANCES: </p>
+            </div>
+        )
+    };
+
+}
